@@ -11,7 +11,7 @@ import SwiftUI
 struct SHCodeChallengeApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            CatDashboardView()
         }
     }
 }
