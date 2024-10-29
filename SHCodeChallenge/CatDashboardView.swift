@@ -11,20 +11,21 @@ struct CatDashboardView: View {
     
     @State private var viewModel = CatDashboardViewModel()
     
-    var columns: [GridItem] = [
-        GridItem(.flexible()),
-        GridItem(.flexible())
-    ]
+    let gridItemWidth: CGFloat = 150
+    let spacing: CGFloat = 16
     
     var body: some View {
         NavigationStack {
             ScrollView {
-                LazyVGrid(columns: self.columns) {
+                LazyVGrid(columns: [
+                    GridItem(.adaptive(minimum: gridItemWidth), spacing: spacing)
+                ]) {
                     ForEach(viewModel.cats, id: \.id) { catBreed in
                         CatItemView(breed: catBreed)
                     }
                 }
             }
+            .padding(.horizontal, spacing)
             .navigationTitle("Cats App")
             .searchable(
                 text: $viewModel.searchString,
@@ -37,4 +38,5 @@ struct CatDashboardView: View {
 
 #Preview {
     CatDashboardView()
+        .preferredColorScheme(.dark)
 }

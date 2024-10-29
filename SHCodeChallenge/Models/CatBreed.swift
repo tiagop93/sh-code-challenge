@@ -14,10 +14,10 @@ struct CatBreed: Decodable, Identifiable {
     let description: String
     let temperament: String
     let lifeSpan: String
-    let image: Image?
+    let image: BreedImage?
 }
 
-struct Image: Codable {
+struct BreedImage: Codable {
     let id: String
     let url: String
 }
