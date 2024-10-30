@@ -74,14 +74,15 @@
 		27FDB4522CD10E7C002E7720 /* SHCodeChallenge */ = {
 			isa = PBXGroup;
 			children = (
+				27FDB47D2CD2937A002E7720 /* Persistence */,
 				27FDB4742CD25F36002E7720 /* Info.plist */,
 				27FDB46D2CD25A17002E7720 /* Network */,
-				27FDB46C2CD12ECD002E7720 /* Mocks */,
 				27FDB4612CD1187A002E7720 /* Models */,
 				27FDB4642CD11A8F002E7720 /* ViewModels */,
 				27FDB4672CD11D1B002E7720 /* Views */,
 				27FDB4532CD10E7C002E7720 /* SHCodeChallengeApp.swift */,
 				27FDB4552CD10E7C002E7720 /* CatDashboardView.swift */,
+				27FDB46C2CD12ECD002E7720 /* Mocks */,
 				27FDB4572CD10E7E002E7720 /* Assets.xcassets */,
 				27FDB4592CD10E7E002E7720 /* Preview Content */,
 			);
@@ -140,6 +141,13 @@
 				27FDB4722CD25DBC002E7720 /* APIConstants.swift */,
 			);
 			path = Network;
+			sourceTree = "<group>";
+		};
+		27FDB47D2CD2937A002E7720 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Persistence;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

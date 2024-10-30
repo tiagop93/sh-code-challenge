@@ -33,52 +33,50 @@ enum APIConstants {
         static let apiKey = "x-api-key"
     }
     
-    // MARK: - API Endpoints
-    
-    enum Endpoint {
-        case breeds(page: Int)
-        case searchBreeds(searchTerm: String)
-        
-        var path: String {
-            switch self {
-            case .breeds:
-                return "/breeds"
-            case .searchBreeds:
-                return "/breeds/search"
-            }
-        }
-        
-        var queryItems: [URLQueryItem]? {
-            switch self {
-            case .breeds(let page):
-                return [
-                    URLQueryItem(name: Params.limit, value: String(perPage)),
-                    URLQueryItem(name: Params.page, value: String(page))
-                ]
-            case .searchBreeds(let searchTerm):
-                return [
-                    URLQueryItem(name: Params.search, value: searchTerm)
-                ]
-            }
-        }
-    }
-    
-    // MARK: - Helper methods
-    
-    static func url(for endpoint: Endpoint) -> URL? {
-        var urlComponents = URLComponents()
-        urlComponents.scheme = scheme
-        urlComponents.host = host
-        urlComponents.path = version + endpoint.path
-        urlComponents.queryItems = endpoint.queryItems
-        return urlComponents.url
-    }
-    
+    // MARK: - Helper function
     private static func getApiToken() -> String {
-        if let apiKey = Bundle.main.object(forInfoDictionaryKey: "APIKey") as? String {
-            return apiKey
-        } else {
-            fatalError("APIKey value is missing")
+        guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "APIKey") as? String else {
+            fatalError("APIKey value is missing in Info.plist")
         }
+        return apiKey
+    }
+}
+
+// MARK: - API Endpoint Definition
+enum Endpoint {
+    case breeds(page: Int)
+    case searchBreeds(searchTerm: String)
+    
+    var path: String {
+        switch self {
+        case .breeds:
+            return "/breeds"
+        case .searchBreeds:
+            return "/breeds/search"
+        }
+    }
+    
+    var queryItems: [URLQueryItem]? {
+        switch self {
+        case .breeds(let page):
+            return [
+                URLQueryItem(name: APIConstants.Params.limit, value: String(APIConstants.perPage)),
+                URLQueryItem(name: APIConstants.Params.page, value: String(page))
+            ]
+        case .searchBreeds(let searchTerm):
+            return [
+                URLQueryItem(name: APIConstants.Params.search, value: searchTerm)
+            ]
+        }
+    }
+    
+    // Generate the full URL for an endpoint
+    func url() -> URL? {
+        var urlComponents = URLComponents()
+        urlComponents.scheme = APIConstants.scheme
+        urlComponents.host = APIConstants.host
+        urlComponents.path = APIConstants.version + self.path
+        urlComponents.queryItems = self.queryItems
+        return urlComponents.url
     }
 }

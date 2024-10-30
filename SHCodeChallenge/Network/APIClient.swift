@@ -12,7 +12,7 @@ struct APIClient: HTTPClient {
     
     func fetchCatBreeds(page: Int) -> AnyPublisher<[CatBreed], HTTPClientError> {
         
-        guard let url = APIConstants.url(for: .breeds(page: page)) else {
+        guard let url = Endpoint.breeds(page: page).url() else {
             return Fail(error: HTTPClientError.badUrl)
                 .eraseToAnyPublisher()
         }
@@ -40,7 +40,7 @@ struct APIClient: HTTPClient {
     
     func searchCatBreeds(searchTerm: String) -> AnyPublisher<[CatBreed], HTTPClientError> {
         
-        guard let url = APIConstants.url(for: .searchBreeds(searchTerm: searchTerm)) else {
+        guard let url = Endpoint.searchBreeds(searchTerm: searchTerm).url() else {
             return Fail(error: HTTPClientError.badUrl)
                 .eraseToAnyPublisher()
         }

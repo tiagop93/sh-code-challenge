@@ -26,13 +26,18 @@ class CatDashboardViewModel: BaseViewModel {
     func loadDataIfNeeded() {
         guard state == .none else { return }
         self.fetchCatBreeds()
-    }  
+    }
+    
+   @MainActor
+    func reloadData() {
+        catBreeds = []
+        currentPage = APIConstants.initialPage
+        self.fetchCatBreeds()
+    }
     
     @MainActor
     func searchData() {
-        print("searchData")
         catBreeds = []
-        currentPage = APIConstants.initialPage
         self.searchCatBreeds()
     }
     

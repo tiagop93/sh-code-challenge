@@ -18,21 +18,33 @@ struct CatDashboardView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                LazyVGrid(columns: [
-                    GridItem(.adaptive(minimum: gridItemWidth), spacing: spacing)
-                ]) {
-                    ForEach(viewModel.catBreeds, id: \.id) { catBreed in
-                        NavigationLink {
-                            CatDetailsView(breed: catBreed)
-                        } label: {
-                            CatItemView(breed: catBreed)
+                switch viewModel.state {
+                case .none, .loading, .success:
+                    LazyVGrid(columns: [
+                        GridItem(.adaptive(minimum: gridItemWidth), spacing: spacing)
+                    ]) {
+                        ForEach(viewModel.catBreeds, id: \.id) { catBreed in
+                            NavigationLink {
+                                CatDetailsView(breed: catBreed)
+                            } label: {
+                                CatItemView(breed: catBreed)
+                            }
+                            .buttonStyle(PlainButtonStyle())
                         }
-                        .buttonStyle(PlainButtonStyle())
+                    }
+                    .onAppear {
+                        viewModel.loadDataIfNeeded()
+                    }
+                case .failed:
+                    ContentUnavailableView {
+                        Text("Error loading users")
+                    } description: {
+                        Button("Retry") {
+                            viewModel.reloadData()
+                        }
                     }
                 }
-                .onAppear {
-                    viewModel.loadDataIfNeeded()
-                }
+                
             }
             .padding(.horizontal, spacing)
             .navigationTitle("Cats App")
@@ -44,6 +56,11 @@ struct CatDashboardView: View {
                 viewModel.searchData()
             }
             .autocorrectionDisabled()
+            .overlay {
+                if viewModel.state == .loading && !viewModel.catBreeds.isEmpty {
+                    ProgressView()
+                }
+            }
         }
     }
 }
