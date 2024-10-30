@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 @Observable
-class CatDashboardViewModel {
+class CatDashboardViewModel: BaseViewModel {
     @ObservationIgnored private var apiClient: HTTPClient
     @ObservationIgnored var cancellables: Set<AnyCancellable> = []
     var searchString: String = ""
@@ -19,21 +19,60 @@ class CatDashboardViewModel {
     
     init(apiClient: HTTPClient) {
         self.apiClient = apiClient
+        super.init()
+    }
+    
+    @MainActor
+    func loadDataIfNeeded() {
+        guard state == .none else { return }
         self.fetchCatBreeds()
+    }  
+    
+    @MainActor
+    func searchData() {
+        print("searchData")
+        catBreeds = []
+        currentPage = APIConstants.initialPage
+        self.searchCatBreeds()
     }
     
     private func fetchCatBreeds() {
+        
+        self.state = .loading
+        
         apiClient.fetchCatBreeds(page: currentPage)
-            .receive(on: DispatchQueue.main)
-            .sink { completion in
-                // TODO: Update state
+            .sink { [weak self] completion in
+                guard let self = self else { return }
                 switch completion {
                 case .finished:
-                    ()
+                    self.state = .success
                 case .failure(let error):
                     print(error)
+                    self.state = .failed
                 }
-            } receiveValue: { response in
+            } receiveValue: { [weak self] response in
+                guard let self = self else { return }
+                self.catBreeds.append(contentsOf: response)
+            }.store(in: &cancellables)
+    }
+    
+    private func searchCatBreeds() {
+        
+        self.state = .loading
+        
+        apiClient.searchCatBreeds(searchTerm: searchString)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] completion in
+                guard let self = self else { return }
+                switch completion {
+                case .finished:
+                    self.state = .success
+                case .failure(let error):
+                    print(error)
+                    self.state = .failed
+                }
+            } receiveValue: { [weak self] response in
+                guard let self = self else { return }
                 self.catBreeds.append(contentsOf: response)
             }.store(in: &cancellables)
     }

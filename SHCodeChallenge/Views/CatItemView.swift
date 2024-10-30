@@ -36,7 +36,6 @@ struct CatItemView: View {
                     .font(.headline)
                     .lineLimit(1)
                     .padding(.bottom, 16)
-                    .frame(maxWidth: .infinity, alignment: .center)
             }
             
             Button(action: {
@@ -50,7 +49,12 @@ struct CatItemView: View {
                     .padding(6)
             }
             .buttonStyle(PlainButtonStyle())
-            .offset(x: -10, y: -2)
         }
     }
+}
+
+#Preview {
+    let catBreed = MockAPIClient().getFirstCatBreed()
+    return CatItemView(breed: catBreed!)
+        .preferredColorScheme(.dark)
 }

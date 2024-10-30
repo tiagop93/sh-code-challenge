@@ -10,9 +10,10 @@ import SwiftUI
 struct CatDashboardView: View {
     
     @State private var viewModel = CatDashboardViewModel(apiClient: APIClient())
+    @Environment(\.dismissSearch) var dismissSearch
     
-    let gridItemWidth: CGFloat = 150
-    let spacing: CGFloat = 16
+    private let gridItemWidth: CGFloat = 150
+    private let spacing: CGFloat = 16
     
     var body: some View {
         NavigationStack {
@@ -21,8 +22,16 @@ struct CatDashboardView: View {
                     GridItem(.adaptive(minimum: gridItemWidth), spacing: spacing)
                 ]) {
                     ForEach(viewModel.catBreeds, id: \.id) { catBreed in
-                        CatItemView(breed: catBreed)
+                        NavigationLink {
+                            CatDetailsView(breed: catBreed)
+                        } label: {
+                            CatItemView(breed: catBreed)
+                        }
+                        .buttonStyle(PlainButtonStyle())
                     }
+                }
+                .onAppear {
+                    viewModel.loadDataIfNeeded()
                 }
             }
             .padding(.horizontal, spacing)
@@ -31,6 +40,9 @@ struct CatDashboardView: View {
                 text: $viewModel.searchString,
                 placement: .navigationBarDrawer(displayMode: .always)
             )
+            .onSubmit(of: .search) {
+                viewModel.searchData()
+            }
             .autocorrectionDisabled()
         }
     }

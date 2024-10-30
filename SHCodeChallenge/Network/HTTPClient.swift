@@ -9,12 +9,16 @@ import Foundation
 import Combine
 
 protocol HTTPClient {
-    func fetchCatBreeds(page: Int) -> AnyPublisher<[CatBreed], Error>
+    func fetchCatBreeds(page: Int) -> AnyPublisher<[CatBreed], HTTPClientError>
+    
+    func searchCatBreeds(searchTerm: String) -> AnyPublisher<[CatBreed], HTTPClientError>
 }
 
-// MARK: HTTPClientError
+// MARK: - HTTPClientError
 
-enum HTTPClientError: Error, Equatable {
-    case invalidResponse
+enum HTTPClientError: Error {
     case badUrl
+    case invalidResponse
+    case decodingError
+    case networkError(Error)
 }

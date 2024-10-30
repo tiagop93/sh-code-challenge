@@ -14,21 +14,37 @@ enum APIConstants {
     static let version = "/v1"
     static let perPage = 20
     static let initialPage = 0
-    static let apiHeaderKey = "x-api-key"
     static let apiKey = getApiToken()
+    
+    // MARK: - Base URLs
     static var imageBaseURL: String {
         return "\(scheme)://\(cdnHost)/images/"
     }
     
-    // MARK: API Endpoints
+    // MARK: - API Parameters Keys
+    enum Params {
+        static let limit = "limit"
+        static let page = "page"
+        static let search = "q"
+    }
+    
+    // MARK: - API Header Keys
+    enum Headers {
+        static let apiKey = "x-api-key"
+    }
+    
+    // MARK: - API Endpoints
     
     enum Endpoint {
         case breeds(page: Int)
+        case searchBreeds(searchTerm: String)
         
         var path: String {
             switch self {
             case .breeds:
                 return "/breeds"
+            case .searchBreeds:
+                return "/breeds/search"
             }
         }
         
@@ -36,14 +52,18 @@ enum APIConstants {
             switch self {
             case .breeds(let page):
                 return [
-                    URLQueryItem(name: "limit", value: String(perPage)),
-                    URLQueryItem(name: "page", value: String(page))
+                    URLQueryItem(name: Params.limit, value: String(perPage)),
+                    URLQueryItem(name: Params.page, value: String(page))
+                ]
+            case .searchBreeds(let searchTerm):
+                return [
+                    URLQueryItem(name: Params.search, value: searchTerm)
                 ]
             }
         }
     }
     
-    // MARK: Helper methods
+    // MARK: - Helper methods
     
     static func url(for endpoint: Endpoint) -> URL? {
         var urlComponents = URLComponents()

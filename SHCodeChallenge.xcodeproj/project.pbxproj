@@ -18,6 +18,10 @@
 		27FDB46F2CD25A27002E7720 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDB46E2CD25A27002E7720 /* HTTPClient.swift */; };
 		27FDB4712CD25A66002E7720 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDB4702CD25A66002E7720 /* APIClient.swift */; };
 		27FDB4732CD25DBC002E7720 /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDB4722CD25DBC002E7720 /* APIConstants.swift */; };
+		27FDB4762CD26FC3002E7720 /* BaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDB4752CD26FC3002E7720 /* BaseViewModel.swift */; };
+		27FDB4782CD28975002E7720 /* CatDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDB4772CD28975002E7720 /* CatDetailsView.swift */; };
+		27FDB47A2CD289C7002E7720 /* MockAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDB4792CD289C7002E7720 /* MockAPIClient.swift */; };
+		27FDB47C2CD28AE2002E7720 /* CatDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDB47B2CD28AE2002E7720 /* CatDetailsViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +38,10 @@
 		27FDB4702CD25A66002E7720 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		27FDB4722CD25DBC002E7720 /* APIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConstants.swift; sourceTree = "<group>"; };
 		27FDB4742CD25F36002E7720 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		27FDB4752CD26FC3002E7720 /* BaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewModel.swift; sourceTree = "<group>"; };
+		27FDB4772CD28975002E7720 /* CatDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatDetailsView.swift; sourceTree = "<group>"; };
+		27FDB4792CD289C7002E7720 /* MockAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAPIClient.swift; sourceTree = "<group>"; };
+		27FDB47B2CD28AE2002E7720 /* CatDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatDetailsViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,7 +107,9 @@
 		27FDB4642CD11A8F002E7720 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				27FDB4752CD26FC3002E7720 /* BaseViewModel.swift */,
 				27FDB4652CD11AA1002E7720 /* CatDashboardViewModel.swift */,
+				27FDB47B2CD28AE2002E7720 /* CatDetailsViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -108,6 +118,7 @@
 			isa = PBXGroup;
 			children = (
 				27FDB4682CD11D3B002E7720 /* CatItemView.swift */,
+				27FDB4772CD28975002E7720 /* CatDetailsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -116,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				27FDB46A2CD12C5E002E7720 /* catlist.json */,
+				27FDB4792CD289C7002E7720 /* MockAPIClient.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -201,11 +213,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27FDB4782CD28975002E7720 /* CatDetailsView.swift in Sources */,
 				27FDB4562CD10E7C002E7720 /* CatDashboardView.swift in Sources */,
 				27FDB4712CD25A66002E7720 /* APIClient.swift in Sources */,
 				27FDB4692CD11D3B002E7720 /* CatItemView.swift in Sources */,
 				27FDB46F2CD25A27002E7720 /* HTTPClient.swift in Sources */,
 				27FDB4732CD25DBC002E7720 /* APIConstants.swift in Sources */,
+				27FDB47C2CD28AE2002E7720 /* CatDetailsViewModel.swift in Sources */,
+				27FDB47A2CD289C7002E7720 /* MockAPIClient.swift in Sources */,
+				27FDB4762CD26FC3002E7720 /* BaseViewModel.swift in Sources */,
 				27FDB4542CD10E7C002E7720 /* SHCodeChallengeApp.swift in Sources */,
 				27FDB4662CD11AA1002E7720 /* CatDashboardViewModel.swift in Sources */,
 				27FDB4632CD1188C002E7720 /* CatBreed.swift in Sources */,
