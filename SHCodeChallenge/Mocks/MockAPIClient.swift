@@ -9,46 +9,45 @@ import Foundation
 import Combine
 
 struct MockAPIClient: HTTPClient {
+    
     func fetchCatBreeds(page: Int) -> AnyPublisher<[CatBreed], HTTPClientError> {
-        if let url = Bundle.main.url(forResource: "catlist", withExtension: "json") {
-            do {
-                let data = try Data(contentsOf: url)
-                let decoder = JSONDecoder()
-                decoder.keyDecodingStrategy = .convertFromSnakeCase
-                let decodedResponse = try decoder.decode([CatBreed].self, from: data)
-                return Just(decodedResponse)
-                    .setFailureType(to: HTTPClientError.self)
-                    .eraseToAnyPublisher()
-            } catch {
-                print("Error decoding mock JSON data: \(error)")
-            }
-        } else {
-            print("No mock JSON file found")
-        }
-        return Just([])
-            .setFailureType(to: HTTPClientError.self)
-            .eraseToAnyPublisher()
+        loadMockData(fileName: "catlist", type: [CatBreed].self)
     }
     
     func searchCatBreeds(searchTerm: String) -> AnyPublisher<[CatBreed], HTTPClientError> {
-        fetchCatBreeds(page: 0)
+        loadMockData(fileName: "catlist", type: [CatBreed].self)
     }
     
     func getFirstCatBreed() -> CatBreed? {
-        if let url = Bundle.main.url(forResource: "catlist", withExtension: "json") {
-            do {
-                let data = try Data(contentsOf: url)
-                let decoder = JSONDecoder()
-                decoder.keyDecodingStrategy = .convertFromSnakeCase
-                let decodedResponse = try decoder.decode([CatBreed].self, from: data)
-                return decodedResponse.first
-            } catch {
-                print("Error decoding mock JSON data: \(error)")
-                return nil
-            }
-        } else {
-            print("No mock JSON file found")
-            return nil
+        try? loadMockDataSync(fileName: "catlist", type: [CatBreed].self).first
+    }
+    
+    // MARK: - Private Helper Methods
+    
+    private func loadMockData<T: Decodable>(fileName: String, type: T.Type) -> AnyPublisher<T, HTTPClientError> {
+        guard let url = Bundle.main.url(forResource: fileName, withExtension: "json") else {
+            return Fail(error: HTTPClientError.badUrl)
+                .eraseToAnyPublisher()
         }
+        
+        do {
+            let data = try Data(contentsOf: url)
+            let decodedData = try JSONDecoder.defaultDecoder.decode(T.self, from: data)
+            return Just(decodedData)
+                .setFailureType(to: HTTPClientError.self)
+                .eraseToAnyPublisher()
+        } catch {
+            print("Error decoding mock JSON data: \(error)")
+            return Fail(error: .decodingError).eraseToAnyPublisher()
+        }
+    }
+    
+    private func loadMockDataSync<T: Decodable>(fileName: String, type: T.Type) throws -> T {
+        guard let url = Bundle.main.url(forResource: fileName, withExtension: "json") else {
+            throw HTTPClientError.badUrl
+        }
+        
+        let data = try Data(contentsOf: url)
+        return try JSONDecoder.defaultDecoder.decode(T.self, from: data)
     }
 }

@@ -22,6 +22,7 @@
 		27FDB4782CD28975002E7720 /* CatDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDB4772CD28975002E7720 /* CatDetailsView.swift */; };
 		27FDB47A2CD289C7002E7720 /* MockAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDB4792CD289C7002E7720 /* MockAPIClient.swift */; };
 		27FDB47C2CD28AE2002E7720 /* CatDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDB47B2CD28AE2002E7720 /* CatDetailsViewModel.swift */; };
+		27FDB4802CD2A160002E7720 /* JSONDecoder+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDB47F2CD2A160002E7720 /* JSONDecoder+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		27FDB4772CD28975002E7720 /* CatDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatDetailsView.swift; sourceTree = "<group>"; };
 		27FDB4792CD289C7002E7720 /* MockAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAPIClient.swift; sourceTree = "<group>"; };
 		27FDB47B2CD28AE2002E7720 /* CatDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatDetailsViewModel.swift; sourceTree = "<group>"; };
+		27FDB47F2CD2A160002E7720 /* JSONDecoder+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JSONDecoder+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,8 +76,9 @@
 		27FDB4522CD10E7C002E7720 /* SHCodeChallenge */ = {
 			isa = PBXGroup;
 			children = (
-				27FDB47D2CD2937A002E7720 /* Persistence */,
 				27FDB4742CD25F36002E7720 /* Info.plist */,
+				27FDB47E2CD2A14A002E7720 /* Extensions */,
+				27FDB47D2CD2937A002E7720 /* Persistence */,
 				27FDB46D2CD25A17002E7720 /* Network */,
 				27FDB4612CD1187A002E7720 /* Models */,
 				27FDB4642CD11A8F002E7720 /* ViewModels */,
@@ -148,6 +151,14 @@
 			children = (
 			);
 			path = Persistence;
+			sourceTree = "<group>";
+		};
+		27FDB47E2CD2A14A002E7720 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				27FDB47F2CD2A160002E7720 /* JSONDecoder+Extensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -232,6 +243,7 @@
 				27FDB4762CD26FC3002E7720 /* BaseViewModel.swift in Sources */,
 				27FDB4542CD10E7C002E7720 /* SHCodeChallengeApp.swift in Sources */,
 				27FDB4662CD11AA1002E7720 /* CatDashboardViewModel.swift in Sources */,
+				27FDB4802CD2A160002E7720 /* JSONDecoder+Extensions.swift in Sources */,
 				27FDB4632CD1188C002E7720 /* CatBreed.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -10,60 +10,39 @@ import Combine
 
 struct APIClient: HTTPClient {
     
+    // MARK: - Public Methods
+    
     func fetchCatBreeds(page: Int) -> AnyPublisher<[CatBreed], HTTPClientError> {
-        
-        guard let url = Endpoint.breeds(page: page).url() else {
-            return Fail(error: HTTPClientError.badUrl)
-                .eraseToAnyPublisher()
-        }
-        
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        
-        return URLSession.shared.dataTaskPublisher(for: url)
-            .tryMap { data, response in
-                guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-                    throw HTTPClientError.invalidResponse
-                }
-                
-                return data
-            }
-            .decode(type: [CatBreed].self, decoder: decoder)
-            .mapError{ error -> HTTPClientError in
-                if error is DecodingError {
-                    return .decodingError
-                }
-                return .networkError(error)
-            }
-            .eraseToAnyPublisher()
+        return request(endpoint: .breeds(page: page))
     }
     
     func searchCatBreeds(searchTerm: String) -> AnyPublisher<[CatBreed], HTTPClientError> {
-        
-        guard let url = Endpoint.searchBreeds(searchTerm: searchTerm).url() else {
-            return Fail(error: HTTPClientError.badUrl)
-                .eraseToAnyPublisher()
+        return request(endpoint: .searchBreeds(searchTerm: searchTerm))
+    }
+    
+    // MARK: - Private Methods
+    
+    private func request<T: Decodable>(endpoint: Endpoint) -> AnyPublisher<T, HTTPClientError> {
+        guard let url = endpoint.url() else {
+            return Fail(error: HTTPClientError.badUrl).eraseToAnyPublisher()
         }
-        
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
         
         return URLSession.shared.dataTaskPublisher(for: url)
             .tryMap { data, response in
                 guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
                     throw HTTPClientError.invalidResponse
                 }
-                
                 return data
             }
-            .decode(type: [CatBreed].self, decoder: decoder)
-            .mapError{ error -> HTTPClientError in
-                if error is DecodingError {
-                    return .decodingError
-                }
-                return .networkError(error)
-            }
+            .decode(type: T.self, decoder: JSONDecoder.defaultDecoder)
+            .mapError { self.handleError($0) }
             .eraseToAnyPublisher()
     }
     
+    private func handleError(_ error: Error) -> HTTPClientError {
+        if error is DecodingError {
+            return .decodingError
+        }
+        return .networkError(error)
+    }
 }
