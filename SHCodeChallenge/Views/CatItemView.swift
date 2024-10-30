@@ -14,7 +14,7 @@ struct CatItemView: View {
     var body: some View {
         ZStack(alignment: .topTrailing) {
             VStack {
-                AsyncImage(url: URL(string: breed.image?.url ?? "")) { phase in
+                AsyncImage(url: breed.imageUrl) { phase in
                     switch phase {
                     case .empty, .failure(_):
                         ProgressView()
@@ -31,6 +31,7 @@ struct CatItemView: View {
                 }
                 .frame(width: imageSize, height: imageSize)
                 .cornerRadius(10)
+                
                 Text(breed.name)
                     .font(.headline)
                     .lineLimit(1)
@@ -49,7 +50,7 @@ struct CatItemView: View {
                     .padding(6)
             }
             .buttonStyle(PlainButtonStyle())
-            .offset(x: -10, y: 0)
+            .offset(x: -10, y: -2)
         }
     }
 }

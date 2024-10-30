@@ -15,6 +15,9 @@
 		27FDB4662CD11AA1002E7720 /* CatDashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDB4652CD11AA1002E7720 /* CatDashboardViewModel.swift */; };
 		27FDB4692CD11D3B002E7720 /* CatItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDB4682CD11D3B002E7720 /* CatItemView.swift */; };
 		27FDB46B2CD12C5E002E7720 /* catlist.json in Resources */ = {isa = PBXBuildFile; fileRef = 27FDB46A2CD12C5E002E7720 /* catlist.json */; };
+		27FDB46F2CD25A27002E7720 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDB46E2CD25A27002E7720 /* HTTPClient.swift */; };
+		27FDB4712CD25A66002E7720 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDB4702CD25A66002E7720 /* APIClient.swift */; };
+		27FDB4732CD25DBC002E7720 /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDB4722CD25DBC002E7720 /* APIConstants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +30,10 @@
 		27FDB4652CD11AA1002E7720 /* CatDashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatDashboardViewModel.swift; sourceTree = "<group>"; };
 		27FDB4682CD11D3B002E7720 /* CatItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatItemView.swift; sourceTree = "<group>"; };
 		27FDB46A2CD12C5E002E7720 /* catlist.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = catlist.json; sourceTree = "<group>"; };
+		27FDB46E2CD25A27002E7720 /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
+		27FDB4702CD25A66002E7720 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		27FDB4722CD25DBC002E7720 /* APIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConstants.swift; sourceTree = "<group>"; };
+		27FDB4742CD25F36002E7720 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +66,8 @@
 		27FDB4522CD10E7C002E7720 /* SHCodeChallenge */ = {
 			isa = PBXGroup;
 			children = (
+				27FDB4742CD25F36002E7720 /* Info.plist */,
+				27FDB46D2CD25A17002E7720 /* Network */,
 				27FDB46C2CD12ECD002E7720 /* Mocks */,
 				27FDB4612CD1187A002E7720 /* Models */,
 				27FDB4642CD11A8F002E7720 /* ViewModels */,
@@ -109,6 +118,16 @@
 				27FDB46A2CD12C5E002E7720 /* catlist.json */,
 			);
 			path = Mocks;
+			sourceTree = "<group>";
+		};
+		27FDB46D2CD25A17002E7720 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				27FDB46E2CD25A27002E7720 /* HTTPClient.swift */,
+				27FDB4702CD25A66002E7720 /* APIClient.swift */,
+				27FDB4722CD25DBC002E7720 /* APIConstants.swift */,
+			);
+			path = Network;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -183,7 +202,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				27FDB4562CD10E7C002E7720 /* CatDashboardView.swift in Sources */,
+				27FDB4712CD25A66002E7720 /* APIClient.swift in Sources */,
 				27FDB4692CD11D3B002E7720 /* CatItemView.swift in Sources */,
+				27FDB46F2CD25A27002E7720 /* HTTPClient.swift in Sources */,
+				27FDB4732CD25DBC002E7720 /* APIConstants.swift in Sources */,
 				27FDB4542CD10E7C002E7720 /* SHCodeChallengeApp.swift in Sources */,
 				27FDB4662CD11AA1002E7720 /* CatDashboardViewModel.swift in Sources */,
 				27FDB4632CD1188C002E7720 /* CatBreed.swift in Sources */,
@@ -322,6 +344,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"SHCodeChallenge/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SHCodeChallenge/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -350,6 +373,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"SHCodeChallenge/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SHCodeChallenge/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

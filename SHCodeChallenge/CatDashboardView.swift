@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CatDashboardView: View {
     
-    @State private var viewModel = CatDashboardViewModel()
+    @State private var viewModel = CatDashboardViewModel(apiClient: APIClient())
     
     let gridItemWidth: CGFloat = 150
     let spacing: CGFloat = 16
@@ -20,7 +20,7 @@ struct CatDashboardView: View {
                 LazyVGrid(columns: [
                     GridItem(.adaptive(minimum: gridItemWidth), spacing: spacing)
                 ]) {
-                    ForEach(viewModel.cats, id: \.id) { catBreed in
+                    ForEach(viewModel.catBreeds, id: \.id) { catBreed in
                         CatItemView(breed: catBreed)
                     }
                 }

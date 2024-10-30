@@ -14,10 +14,12 @@ struct CatBreed: Decodable, Identifiable {
     let description: String
     let temperament: String
     let lifeSpan: String
-    let image: BreedImage?
-}
-
-struct BreedImage: Codable {
-    let id: String
-    let url: String
+    let referenceImageId: String?
+    
+    // MARK: Custom properties
+    
+    var imageUrl: URL? {
+        guard let imageId = referenceImageId else { return nil }
+        return URL(string: APIConstants.imageBaseURL + imageId + ".jpg")
+    }
 }

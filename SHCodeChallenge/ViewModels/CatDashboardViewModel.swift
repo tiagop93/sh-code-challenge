@@ -10,44 +10,31 @@ import Combine
 
 @Observable
 class CatDashboardViewModel {
+    @ObservationIgnored private var apiClient: HTTPClient
     @ObservationIgnored var cancellables: Set<AnyCancellable> = []
     var searchString: String = ""
-    var cats: [CatBreed] = []
+    var catBreeds: [CatBreed] = []
     
-    init() {
-        populateCats()
+    private var currentPage = APIConstants.initialPage
+    
+    init(apiClient: HTTPClient) {
+        self.apiClient = apiClient
+        self.fetchCatBreeds()
+    }
+    
+    private func fetchCatBreeds() {
+        apiClient.fetchCatBreeds(page: currentPage)
             .receive(on: DispatchQueue.main)
             .sink { completion in
+                // TODO: Update state
                 switch completion {
                 case .finished:
                     ()
-                case .failure(_):
-                    ()
+                case .failure(let error):
+                    print(error)
                 }
             } receiveValue: { response in
-                self.cats = response
-            }
-            .store(in: &cancellables)
-    }
-    
-    private func populateCats() -> AnyPublisher<[CatBreed], Error> {
-        if let url = Bundle.main.url(forResource: "catlist", withExtension: "json") {
-            do {
-                let data = try Data(contentsOf: url)
-                let decoder = JSONDecoder()
-                decoder.keyDecodingStrategy = .convertFromSnakeCase
-                let decodedCatsResponse = try decoder.decode([CatBreed].self, from: data)
-                return Just(decodedCatsResponse)
-                    .setFailureType(to: Error.self)
-                    .eraseToAnyPublisher()
-            } catch {
-                print("Error decoding mock JSON data: \(error)")
-            }
-        } else {
-            print("No mock JSON file found")
-        }
-        return Just([])
-            .setFailureType(to: Error.self)
-            .eraseToAnyPublisher()
+                self.catBreeds.append(contentsOf: response)
+            }.store(in: &cancellables)
     }
 }
