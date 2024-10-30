@@ -28,6 +28,11 @@ struct CatDashboardView: View {
                                 CatDetailsView(breed: catBreed)
                             } label: {
                                 CatItemView(breed: catBreed)
+                                    .onAppear {
+                                        if viewModel.isLastCatBreed(catBreed) {
+                                            viewModel.triggerLoadNextPage()
+                                        }
+                                    }
                             }
                             .buttonStyle(PlainButtonStyle())
                         }
