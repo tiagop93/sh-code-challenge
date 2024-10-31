@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+
 @Observable
 class CatDashboardViewModel: BaseViewModel {
     enum Mode {
@@ -14,7 +15,7 @@ class CatDashboardViewModel: BaseViewModel {
         case search
     }
     
-    @ObservationIgnored private var apiClient: HTTPClient
+    @ObservationIgnored private let apiClient: HTTPClient
     @ObservationIgnored var cancellables: Set<AnyCancellable> = []
     
     var searchString: String = ""
@@ -23,6 +24,7 @@ class CatDashboardViewModel: BaseViewModel {
     private var currentPage = APIConstants.initialPage
     private let loadNextPageSubject = PassthroughSubject<Void, Never>()
     private var mode: Mode = .normal
+    private var favoriteCatBreedIDs: Set<String> = []
     
     init(apiClient: HTTPClient) {
         self.apiClient = apiClient

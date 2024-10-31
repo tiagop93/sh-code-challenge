@@ -10,6 +10,8 @@ import SwiftUI
 struct CatDashboardView: View {
     
     @State private var viewModel = CatDashboardViewModel(apiClient: APIClient())
+    @State private var favoriteVM = CatFavoriteStatus(dataStore: .shared)
+    @State private var showFavorites = false
     @Environment(\.dismissSearch) var dismissSearch
     
     private let gridItemWidth: CGFloat = 150
@@ -25,9 +27,9 @@ struct CatDashboardView: View {
                     ]) {
                         ForEach(viewModel.catBreeds, id: \.id) { catBreed in
                             NavigationLink {
-                                CatDetailsView(breed: catBreed)
+                                CatDetailsView(catBreed: catBreed, viewModel: favoriteVM)
                             } label: {
-                                CatItemView(breed: catBreed)
+                                CatItemView(catBreed: catBreed, viewModel: favoriteVM)
                                     .onAppear {
                                         if viewModel.isLastCatBreed(catBreed) {
                                             viewModel.triggerLoadNextPage()
@@ -53,6 +55,16 @@ struct CatDashboardView: View {
             }
             .padding(.horizontal, spacing)
             .navigationTitle("Cats App")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showFavorites = true
+                    } label: {
+                        Image(systemName: "heart.fill")
+                            .foregroundStyle(.red)
+                    }
+                }
+            }
             .searchable(
                 text: $viewModel.searchString,
                 placement: .navigationBarDrawer(displayMode: .always)
@@ -65,6 +77,9 @@ struct CatDashboardView: View {
                 if viewModel.state == .loading && !viewModel.catBreeds.isEmpty {
                     ProgressView()
                 }
+            }
+            .navigationDestination(isPresented: $showFavorites) {  // Navigate to FavoriteBreedsView
+                FavoriteBreedsView(viewModel: favoriteVM)
             }
         }
     }

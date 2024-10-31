@@ -8,35 +8,44 @@
 import SwiftUI
 
 struct CatDetailsView: View {
-    let breed: CatBreed
+    @State private var viewModel: CatFavoriteStatus
+    let catBreed: CatBreed
+    
+    init(catBreed: CatBreed, viewModel: CatFavoriteStatus) {
+        self.catBreed = catBreed
+        self.viewModel = viewModel
+    }
     
     var body: some View {
         ScrollView {
             VStack {
-                Text(breed.name)
+                Text(catBreed.name)
                     .font(.largeTitle)
-                AsyncImage(url: breed.imageUrl) { phase in
-                    switch phase {
-                    case .empty:
-                        ProgressView()
-                    case .success(let image):
-                        image
-                            .resizable()
-                            .scaledToFit()
-                    case .failure(_):
-                        ProgressView()
-                    @unknown default:
-                        ProgressView()
+                ZStack(alignment: .topTrailing) {
+                    AsyncImage(url: catBreed.imageUrl) { phase in
+                        switch phase {
+                        case .empty:
+                            ProgressView()
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .scaledToFit()
+                        case .failure(_):
+                            ProgressView()
+                        @unknown default:
+                            ProgressView()
+                        }
                     }
                     
+                    FavoriteButton(isFavorite: viewModel.isFavoriteBinding(for: catBreed.id), size: 45)
                 }
             }.padding()
             VStack(alignment: .leading, spacing: 6) {
-                Text("Origin: \(breed.origin)")
+                Text("Origin: \(catBreed.origin)")
                     .font(.subheadline)
-                Text("Temperament: \(breed.temperament)")
+                Text("Temperament: \(catBreed.temperament)")
                     .font(.subheadline)
-                Text("Description: \(breed.description)")
+                Text("Description: \(catBreed.description)")
                     .font(.subheadline)
             }.padding()
             
@@ -44,10 +53,4 @@ struct CatDetailsView: View {
         }
         // fav button
     }
-}
-
-#Preview {
-    let catBreed = MockAPIClient().getFirstCatBreed()
-    return CatDetailsView(breed: catBreed!)
-        .preferredColorScheme(.dark)
 }

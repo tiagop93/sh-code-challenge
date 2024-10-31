@@ -10,6 +10,8 @@ import Combine
 
 struct MockAPIClient: HTTPClient {
     
+    // MARK: - Public Methods
+    
     func fetchCatBreeds(page: Int) -> AnyPublisher<[CatBreed], HTTPClientError> {
         loadMockData(fileName: "catlist", type: [CatBreed].self)
     }

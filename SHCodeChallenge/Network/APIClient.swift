@@ -9,22 +9,54 @@ import Foundation
 import Combine
 
 struct APIClient: HTTPClient {
+    // MARK: - Properties
+    private let dataPersistence: DataPersistence
+    private let reachability: NetworkReachability
+    private let decoder: JSONDecoder
+
+    // MARK: - Initialization
+    init(persistence: DataPersistence = CatBreedDataPersistence.shared,
+         reachability: NetworkReachability = DefaultNetworkReachability(),
+         decoder: JSONDecoder = .defaultDecoder) {
+        self.dataPersistence = persistence
+        self.reachability = reachability
+        self.decoder = decoder
+    }
     
     // MARK: - Public Methods
     
     func fetchCatBreeds(page: Int) -> AnyPublisher<[CatBreed], HTTPClientError> {
-        return request(endpoint: .breeds(page: page))
+        if reachability.isConnected {
+            return request(endpoint: .breeds(page: page))
+                .handleEvents(receiveOutput: { catBreeds in
+                    dataPersistence.saveCatBreeds(catBreeds)
+                })
+                .eraseToAnyPublisher()
+        } else {
+            print("No internet connection, using local data")
+            let cachedBreeds = dataPersistence.fetchAllCatBreeds()
+                .map { CatBreed(id: $0.id, name: $0.name, origin: $0.origin, description: $0.breedDescription, temperament: $0.temperament, lifeSpan: $0.lifeSpan, referenceImageId: $0.referenceImageId) }
+            return Just(cachedBreeds)
+                .setFailureType(to: HTTPClientError.self)
+                .eraseToAnyPublisher()
+        }
     }
     
     func searchCatBreeds(searchTerm: String) -> AnyPublisher<[CatBreed], HTTPClientError> {
+        guard reachability.isConnected else {
+            return Fail(error: HTTPClientError.noInternetConnection)
+                .eraseToAnyPublisher()
+        }
         return request(endpoint: .searchBreeds(searchTerm: searchTerm))
+            .eraseToAnyPublisher()
     }
     
     // MARK: - Private Methods
     
     private func request<T: Decodable>(endpoint: Endpoint) -> AnyPublisher<T, HTTPClientError> {
         guard let url = endpoint.url() else {
-            return Fail(error: HTTPClientError.badUrl).eraseToAnyPublisher()
+            return Fail(error: HTTPClientError.badUrl)
+                .eraseToAnyPublisher()
         }
         
         return URLSession.shared.dataTaskPublisher(for: url)
@@ -38,6 +70,8 @@ struct APIClient: HTTPClient {
             .mapError { self.handleError($0) }
             .eraseToAnyPublisher()
     }
+    
+    // MARK: - Error Handling
     
     private func handleError(_ error: Error) -> HTTPClientError {
         if error is DecodingError {

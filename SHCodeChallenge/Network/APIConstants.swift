@@ -70,7 +70,6 @@ enum Endpoint {
         }
     }
     
-    // Generate the full URL for an endpoint
     func url() -> URL? {
         var urlComponents = URLComponents()
         urlComponents.scheme = APIConstants.scheme

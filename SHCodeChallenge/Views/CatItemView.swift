@@ -8,13 +8,20 @@
 import SwiftUI
 
 struct CatItemView: View {
-    let breed: CatBreed
+    @State private var viewModel: CatFavoriteStatus
+    
+    let catBreed: CatBreed
     private let imageSize: CGFloat = 150
+    
+    init(catBreed: CatBreed, viewModel: CatFavoriteStatus) {
+        self.catBreed = catBreed
+        self.viewModel = viewModel
+    }
     
     var body: some View {
         ZStack(alignment: .topTrailing) {
             VStack {
-                AsyncImage(url: breed.imageUrl) { phase in
+                AsyncImage(url: catBreed.imageUrl) { phase in
                     switch phase {
                     case .empty, .failure(_):
                         ProgressView()
@@ -32,29 +39,13 @@ struct CatItemView: View {
                 .frame(width: imageSize, height: imageSize)
                 .cornerRadius(10)
                 
-                Text(breed.name)
+                Text(catBreed.name)
                     .font(.headline)
                     .lineLimit(1)
                     .padding(.bottom, 16)
             }
             
-            Button(action: {
-                //TODO: Add implementation
-            }) {
-                Image(systemName: "heart")
-                    .resizable()
-                    .scaledToFit()
-                    .foregroundStyle(.red)
-                    .frame(width: 25, height: 25)
-                    .padding(6)
-            }
-            .buttonStyle(PlainButtonStyle())
+            FavoriteButton(isFavorite: viewModel.isFavoriteBinding(for: catBreed.id), size: 25)
         }
     }
-}
-
-#Preview {
-    let catBreed = MockAPIClient().getFirstCatBreed()
-    return CatItemView(breed: catBreed!)
-        .preferredColorScheme(.dark)
 }

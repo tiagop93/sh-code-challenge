@@ -20,5 +20,6 @@ enum HTTPClientError: Error {
     case badUrl
     case invalidResponse
     case decodingError
+    case noInternetConnection
     case networkError(Error)
 }
