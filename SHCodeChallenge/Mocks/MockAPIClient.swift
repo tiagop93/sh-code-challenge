@@ -10,18 +10,30 @@ import Combine
 
 struct MockAPIClient: HTTPClient {
     
+    // MARK: - Properties
+    private let dataPersistence: DataPersistence
+    
+    // MARK: - Initialization
+    init(persistence: DataPersistence = CatBreedDataPersistence.mock) {
+        self.dataPersistence = persistence
+    }
+    
     // MARK: - Public Methods
     
-    func fetchCatBreeds(page: Int) -> AnyPublisher<[CatBreed], HTTPClientError> {
-        loadMockData(fileName: "catlist", type: [CatBreed].self)
+    func fetchCatBreeds(page: Int) -> AnyPublisher<[CatBreedResponse], HTTPClientError> {
+        return loadMockData(fileName: "catlist", type: [CatBreedResponse].self)
+            .handleEvents(receiveOutput: { catBreeds in
+                dataPersistence.saveCatBreeds(catBreeds)
+            })
+            .eraseToAnyPublisher()
     }
     
-    func searchCatBreeds(searchTerm: String) -> AnyPublisher<[CatBreed], HTTPClientError> {
-        loadMockData(fileName: "catlist", type: [CatBreed].self)
+    func searchCatBreeds(searchTerm: String) -> AnyPublisher<[CatBreedResponse], HTTPClientError> {
+        loadMockData(fileName: "catlist", type: [CatBreedResponse].self)
     }
     
-    func getFirstCatBreed() -> CatBreed? {
-        try? loadMockDataSync(fileName: "catlist", type: [CatBreed].self).first
+    func getFirstCatBreed() -> CatBreedResponse? {
+        try? loadMockDataSync(fileName: "catlist", type: [CatBreedResponse].self).first
     }
     
     // MARK: - Private Helper Methods

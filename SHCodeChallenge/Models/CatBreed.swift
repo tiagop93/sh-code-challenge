@@ -1,25 +1,41 @@
 //
-//  Cat.swift
+//  CatBreed.swift
 //  SHCodeChallenge
 //
-//  Created by Tiago Pereira on 29/10/2024.
+//  Created by Tiago Pereira on 01/11/2024.
 //
 
 import Foundation
 
-struct CatBreed: Decodable, Identifiable {
+struct CatBreed: Identifiable {
     let id: String
     let name: String
     let origin: String
     let description: String
     let temperament: String
     let lifeSpan: String
-    let referenceImageId: String?
+    var imageUrl: URL?
+    var isFavorite: Bool
     
-    // MARK: Custom properties
+    init(catBreedResponse: CatBreedResponse, isFavorite: Bool) {
+        self.id = catBreedResponse.id
+        self.name = catBreedResponse.name
+        self.origin = catBreedResponse.origin
+        self.description = catBreedResponse.description
+        self.temperament = catBreedResponse.temperament
+        self.lifeSpan = catBreedResponse.lifeSpan
+        self.imageUrl = catBreedResponse.imageUrl
+        self.isFavorite = isFavorite
+    }
     
-    var imageUrl: URL? {
-        guard let imageId = referenceImageId else { return nil }
-        return URL(string: APIConstants.imageBaseURL + imageId + ".jpg")
+    init(catBreedEntity: CatBreedEntity) {
+        self.id = catBreedEntity.id
+        self.name = catBreedEntity.name
+        self.origin = catBreedEntity.origin
+        self.description = catBreedEntity.breedDescription
+        self.temperament = catBreedEntity.temperament
+        self.lifeSpan = catBreedEntity.lifeSpan
+        self.imageUrl = URL(string: catBreedEntity.imageUrl ?? "")
+        self.isFavorite = catBreedEntity.isFavorite
     }
 }

@@ -9,8 +9,7 @@ import SwiftUI
 
 struct CatDashboardView: View {
     
-    @State private var viewModel = CatDashboardViewModel(apiClient: APIClient())
-    @State private var favoriteVM = CatFavoriteStatus(dataStore: .shared)
+    @State private var viewModel = CatDashboardViewModel(apiClient: APIClient(), dataStore: .shared)
     @State private var showFavorites = false
     @Environment(\.dismissSearch) var dismissSearch
     
@@ -25,11 +24,11 @@ struct CatDashboardView: View {
                     LazyVGrid(columns: [
                         GridItem(.adaptive(minimum: gridItemWidth), spacing: spacing)
                     ]) {
-                        ForEach(viewModel.catBreeds, id: \.id) { catBreed in
+                        ForEach(viewModel.catBreeds) { catBreed in
                             NavigationLink {
-                                CatDetailsView(catBreed: catBreed, viewModel: favoriteVM)
+                                CatDetailsView(catBreed: catBreed)
                             } label: {
-                                CatItemView(catBreed: catBreed, viewModel: favoriteVM)
+                                CatItemView(catBreed: catBreed)
                                     .onAppear {
                                         if viewModel.isLastCatBreed(catBreed) {
                                             viewModel.triggerLoadNextPage()
@@ -44,14 +43,13 @@ struct CatDashboardView: View {
                     }
                 case .failed:
                     ContentUnavailableView {
-                        Text("Error loading users")
+                        Text("Error loading cat breeds")
                     } description: {
                         Button("Retry") {
                             viewModel.reloadData()
                         }
                     }
                 }
-                
             }
             .padding(.horizontal, spacing)
             .navigationTitle("Cats App")
@@ -78,10 +76,11 @@ struct CatDashboardView: View {
                     ProgressView()
                 }
             }
-            .navigationDestination(isPresented: $showFavorites) {  // Navigate to FavoriteBreedsView
-                FavoriteBreedsView(viewModel: favoriteVM)
+            .navigationDestination(isPresented: $showFavorites) {
+                FavoriteBreedsView()
             }
         }
+        .environment(viewModel)
     }
 }
 

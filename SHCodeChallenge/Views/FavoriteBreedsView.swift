@@ -8,18 +8,21 @@
 import SwiftUI
 
 struct FavoriteBreedsView: View {
-    @State var viewModel: CatFavoriteStatus
+    
+    @Environment(CatDashboardViewModel.self) private var viewModel
     
     var body: some View {
         NavigationStack {
             List(viewModel.getFavoriteBreeds()) { catBreed in
                 NavigationLink {
-                    CatDetailsView(catBreed: catBreed, viewModel: viewModel)
+                    CatDetailsView(catBreed: catBreed)
                 } label: {
-                    // breed image
-                    // breed name
-                    Text(catBreed.name)
-                    // breed average lifespan
+                    VStack(alignment: .leading) {
+                        Text(catBreed.name)
+                            .font(.title2)
+                        Text("Life span: \(catBreed.lifeSpan)")
+                            .font(.caption)
+                    }
                 }
             }
             .navigationTitle("Favorite Breeds")
@@ -28,5 +31,7 @@ struct FavoriteBreedsView: View {
 }
 
 #Preview {
-    FavoriteBreedsView(viewModel: CatFavoriteStatus(dataStore: .shared))
+    FavoriteBreedsView()
+        .preferredColorScheme(.dark)
+        .environment(CatDashboardViewModel(apiClient: APIClient(), dataStore: .shared))
 }

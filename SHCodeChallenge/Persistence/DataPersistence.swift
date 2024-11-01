@@ -8,7 +8,7 @@
 import Foundation
 
 protocol DataPersistence {
-    func saveCatBreeds(_ breeds: [CatBreed])
+    func saveCatBreeds(_ breeds: [CatBreedResponse])
     func fetchAllCatBreeds() -> [CatBreedEntity]
     func toggleFavoriteStatus(for breedID: String)
     func fetchFavorites() -> [CatBreedEntity]

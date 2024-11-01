@@ -16,6 +16,7 @@ class CatDashboardViewModel: BaseViewModel {
     }
     
     @ObservationIgnored private let apiClient: HTTPClient
+    @ObservationIgnored private let dataStore: CatBreedDataPersistence
     @ObservationIgnored var cancellables: Set<AnyCancellable> = []
     
     var searchString: String = ""
@@ -26,8 +27,9 @@ class CatDashboardViewModel: BaseViewModel {
     private var mode: Mode = .normal
     private var favoriteCatBreedIDs: Set<String> = []
     
-    init(apiClient: HTTPClient) {
+    init(apiClient: HTTPClient, dataStore: CatBreedDataPersistence) {
         self.apiClient = apiClient
+        self.dataStore = dataStore
         super.init()
         self.setupPaginationListener()
     }
@@ -59,6 +61,22 @@ class CatDashboardViewModel: BaseViewModel {
         self.searchCatBreeds()
     }
     
+    func toggleFavorite(for breed: CatBreed) {
+        if let index = catBreeds.firstIndex(where: { $0.id == breed.id }) {
+            catBreeds[index].isFavorite.toggle()
+        }
+        
+        dataStore.toggleFavoriteStatus(for: breed.id)
+    }
+    
+    func getFavoriteBreeds() -> [CatBreed] {
+        let favoriteCatBreeds = dataStore.fetchFavorites()
+        
+        return favoriteCatBreeds.map { catBreedEntity in
+            CatBreed(catBreedEntity: catBreedEntity)
+        }
+    }
+    
     func triggerLoadNextPage() {
         guard mode == .normal else { return }
         loadNextPageSubject.send(())
@@ -83,7 +101,7 @@ class CatDashboardViewModel: BaseViewModel {
                 }
             } receiveValue: { [weak self] response in
                 guard let self = self else { return }
-                self.catBreeds.append(contentsOf: response)
+                self.catBreeds.append(contentsOf: mapResponseToCatBreeds(response))
             }.store(in: &cancellables)
     }
     
@@ -100,7 +118,7 @@ class CatDashboardViewModel: BaseViewModel {
                 }
             } receiveValue: { [weak self] response in
                 guard let self = self else { return }
-                self.catBreeds = response
+                self.catBreeds.append(contentsOf: mapResponseToCatBreeds(response))
             }.store(in: &cancellables)
     }
     
@@ -120,5 +138,13 @@ class CatDashboardViewModel: BaseViewModel {
                 }
             }
             .store(in: &cancellables)
+    }
+    
+    private func mapResponseToCatBreeds(_ catBreedResponse: [CatBreedResponse]) -> [CatBreed] {
+        let savedCatBreeds = dataStore.fetchCatBreeds(for: catBreedResponse)
+        return catBreedResponse.map { catBreedResponse in
+            let isFavorite = savedCatBreeds.first { $0.id == catBreedResponse.id }?.isFavorite ?? false
+            return CatBreed(catBreedResponse: catBreedResponse, isFavorite: isFavorite)
+        }
     }
 }

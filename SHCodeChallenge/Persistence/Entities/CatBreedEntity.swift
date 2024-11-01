@@ -19,7 +19,7 @@ class CatBreedEntity {
     var imageUrl: String?
     var isFavorite: Bool = false
     
-    init(catBreed: CatBreed, isFavorite: Bool) {
+    init(catBreed: CatBreedResponse, isFavorite: Bool) {
         id = catBreed.id
         name = catBreed.name
         origin = catBreed.origin

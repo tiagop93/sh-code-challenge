@@ -8,15 +8,9 @@
 import SwiftUI
 
 struct CatItemView: View {
-    @State private var viewModel: CatFavoriteStatus
     
-    let catBreed: CatBreed
+    var catBreed: CatBreed
     private let imageSize: CGFloat = 150
-    
-    init(catBreed: CatBreed, viewModel: CatFavoriteStatus) {
-        self.catBreed = catBreed
-        self.viewModel = viewModel
-    }
     
     var body: some View {
         ZStack(alignment: .topTrailing) {
@@ -45,7 +39,7 @@ struct CatItemView: View {
                     .padding(.bottom, 16)
             }
             
-            FavoriteButton(isFavorite: viewModel.isFavoriteBinding(for: catBreed.id), size: 25)
+            FavoriteButton(catBreed: catBreed, size: 25)
         }
     }
 }

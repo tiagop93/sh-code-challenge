@@ -11,7 +11,7 @@ import SwiftUI
 
 @Observable
 class CatFavoriteStatus {
-    @ObservationIgnored private let dataStore: CatBreedDataPersistence  // Consistent type usage
+    @ObservationIgnored private let dataStore: CatBreedDataPersistence
     private var favoriteBreeds: Set<String> = []
 
     init(dataStore: CatBreedDataPersistence) {
@@ -35,22 +35,6 @@ class CatFavoriteStatus {
             favoriteBreeds.insert(breedID)
         }
         dataStore.toggleFavoriteStatus(for: breedID)
-    }
-    
-    func getFavoriteBreeds() -> [CatBreed] {
-        return dataStore.fetchFavorites()
-            .filter { favoriteBreeds.contains($0.id) } // Only include those in favoriteBreeds set
-            .map { entity in
-                CatBreed(
-                    id: entity.id,
-                    name: entity.name,
-                    origin: entity.origin,
-                    description: entity.breedDescription,
-                    temperament: entity.temperament,
-                    lifeSpan: entity.lifeSpan,
-                    referenceImageId: entity.referenceImageId
-                )
-            }
     }
 
     func isFavoriteBinding(for breedID: String) -> Binding<Bool> {

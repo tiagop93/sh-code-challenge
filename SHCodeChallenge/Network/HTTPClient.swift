@@ -9,9 +9,9 @@ import Foundation
 import Combine
 
 protocol HTTPClient {
-    func fetchCatBreeds(page: Int) -> AnyPublisher<[CatBreed], HTTPClientError>
+    func fetchCatBreeds(page: Int) -> AnyPublisher<[CatBreedResponse], HTTPClientError>
     
-    func searchCatBreeds(searchTerm: String) -> AnyPublisher<[CatBreed], HTTPClientError>
+    func searchCatBreeds(searchTerm: String) -> AnyPublisher<[CatBreedResponse], HTTPClientError>
 }
 
 // MARK: - HTTPClientError

@@ -8,13 +8,8 @@
 import SwiftUI
 
 struct CatDetailsView: View {
-    @State private var viewModel: CatFavoriteStatus
-    let catBreed: CatBreed
     
-    init(catBreed: CatBreed, viewModel: CatFavoriteStatus) {
-        self.catBreed = catBreed
-        self.viewModel = viewModel
-    }
+    var catBreed: CatBreed
     
     var body: some View {
         ScrollView {
@@ -37,7 +32,7 @@ struct CatDetailsView: View {
                         }
                     }
                     
-                    FavoriteButton(isFavorite: viewModel.isFavoriteBinding(for: catBreed.id), size: 45)
+                    FavoriteButton(catBreed: catBreed, size: 45)
                 }
             }.padding()
             VStack(alignment: .leading, spacing: 6) {

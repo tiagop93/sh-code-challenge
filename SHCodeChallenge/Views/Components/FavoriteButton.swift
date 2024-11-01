@@ -8,14 +8,16 @@
 import SwiftUI
 
 struct FavoriteButton: View {
-    @Binding var isFavorite: Bool
+    
+    @Environment(CatDashboardViewModel.self) private var viewModel
+    var catBreed: CatBreed
     var size: CGFloat = 45
     
     var body: some View {
         Button(action: {
-            isFavorite.toggle()
+            viewModel.toggleFavorite(for: catBreed)
         }) {
-            Image(systemName: isFavorite ? "heart.fill": "heart")
+            Image(systemName: catBreed.isFavorite ? "heart.fill": "heart")
                 .resizable()
                 .scaledToFit()
                 .foregroundStyle(.red)
@@ -24,8 +26,4 @@ struct FavoriteButton: View {
         }
         .buttonStyle(PlainButtonStyle())
     }
-}
-
-#Preview {
-    FavoriteButton(isFavorite: Binding.constant(true), size: 45)
 }

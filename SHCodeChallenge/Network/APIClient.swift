@@ -12,20 +12,17 @@ struct APIClient: HTTPClient {
     // MARK: - Properties
     private let dataPersistence: DataPersistence
     private let reachability: NetworkReachability
-    private let decoder: JSONDecoder
 
     // MARK: - Initialization
     init(persistence: DataPersistence = CatBreedDataPersistence.shared,
-         reachability: NetworkReachability = DefaultNetworkReachability(),
-         decoder: JSONDecoder = .defaultDecoder) {
+         reachability: NetworkReachability = DefaultNetworkReachability()) {
         self.dataPersistence = persistence
         self.reachability = reachability
-        self.decoder = decoder
     }
     
     // MARK: - Public Methods
     
-    func fetchCatBreeds(page: Int) -> AnyPublisher<[CatBreed], HTTPClientError> {
+    func fetchCatBreeds(page: Int) -> AnyPublisher<[CatBreedResponse], HTTPClientError> {
         if reachability.isConnected {
             return request(endpoint: .breeds(page: page))
                 .handleEvents(receiveOutput: { catBreeds in
@@ -35,14 +32,14 @@ struct APIClient: HTTPClient {
         } else {
             print("No internet connection, using local data")
             let cachedBreeds = dataPersistence.fetchAllCatBreeds()
-                .map { CatBreed(id: $0.id, name: $0.name, origin: $0.origin, description: $0.breedDescription, temperament: $0.temperament, lifeSpan: $0.lifeSpan, referenceImageId: $0.referenceImageId) }
+                .map { CatBreedResponse(id: $0.id, name: $0.name, origin: $0.origin, description: $0.breedDescription, temperament: $0.temperament, lifeSpan: $0.lifeSpan, referenceImageId: $0.referenceImageId) }
             return Just(cachedBreeds)
                 .setFailureType(to: HTTPClientError.self)
                 .eraseToAnyPublisher()
         }
     }
     
-    func searchCatBreeds(searchTerm: String) -> AnyPublisher<[CatBreed], HTTPClientError> {
+    func searchCatBreeds(searchTerm: String) -> AnyPublisher<[CatBreedResponse], HTTPClientError> {
         guard reachability.isConnected else {
             return Fail(error: HTTPClientError.noInternetConnection)
                 .eraseToAnyPublisher()
