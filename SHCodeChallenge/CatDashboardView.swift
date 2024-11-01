@@ -43,7 +43,7 @@ struct CatDashboardView: View {
                     }
                 case .failed:
                     ContentUnavailableView {
-                        Text("Error fetching cat breeds")
+                        Text("Error fetching cat breeds.")
                     } description: {
                         Button("Retry") {
                             viewModel.reloadData()
@@ -79,6 +79,13 @@ struct CatDashboardView: View {
             .overlay {
                 if viewModel.state == .loading && !viewModel.catBreeds.isEmpty {
                     ProgressView()
+                }
+                if viewModel.state == .success && viewModel.catBreeds.isEmpty {
+                    ContentUnavailableView {
+                        Text("No breeds found.")
+                    } description: {
+                        Text("Try a different search.")
+                    }
                 }
             }
             .navigationDestination(isPresented: $showFavorites) {

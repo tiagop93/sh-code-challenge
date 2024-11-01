@@ -13,7 +13,7 @@ struct FavoriteBreedsView: View {
     
     var body: some View {
         NavigationStack {
-            List(viewModel.getFavoriteBreeds()) { catBreed in
+            List(viewModel.favoriteBreeds) { catBreed in
                 NavigationLink {
                     CatDetailsView(catBreed: catBreed)
                 } label: {
@@ -26,6 +26,18 @@ struct FavoriteBreedsView: View {
                 }
             }
             .navigationTitle("Favorite Breeds")
+            .onAppear {
+                viewModel.loadFavoriteBreeds()
+            }
+            .overlay {
+                if viewModel.favoriteBreeds.isEmpty {
+                    ContentUnavailableView {
+                        Text("No favorite breeds.")
+                    } description: {
+                        Text("Your favorite breeds will appear here.")
+                    }
+                }
+            }
         }
     }
 }

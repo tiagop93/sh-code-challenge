@@ -27,6 +27,7 @@ class CatDashboardViewModel: BaseViewModel {
     
     var searchString: String = ""
     var catBreeds: [CatBreed] = []
+    var favoriteBreeds: [CatBreed] = []
     
     private var currentPage = APIConstants.initialPage
     private let loadNextPageSubject = PassthroughSubject<Void, Never>()
@@ -74,12 +75,9 @@ class CatDashboardViewModel: BaseViewModel {
         dataStore.toggleFavoriteStatus(for: breed.id)
     }
     
-    func getFavoriteBreeds() -> [CatBreed] {
-        let favoriteCatBreeds = dataStore.fetchFavorites()
-        
-        return favoriteCatBreeds.map { catBreedEntity in
-            CatBreed(catBreedEntity: catBreedEntity)
-        }
+    func loadFavoriteBreeds() {
+        let favoriteEntities = dataStore.fetchFavorites()
+        favoriteBreeds = favoriteEntities.map { CatBreed(catBreedEntity: $0) }
     }
     
     func triggerLoadNextPage() {
