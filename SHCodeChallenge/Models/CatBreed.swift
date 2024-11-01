@@ -15,8 +15,11 @@ struct CatBreed: Identifiable {
     let temperament: String
     let lifeSpan: String
     var imageUrl: URL?
-    var isFavorite: Bool
+    var isFavorite: Bool = false
     
+    // MARK: - Initializers
+    
+    /// Create a 'CatBreed' from a 'CatBreedResponse'.
     init(catBreedResponse: CatBreedResponse, isFavorite: Bool) {
         self.id = catBreedResponse.id
         self.name = catBreedResponse.name
@@ -28,6 +31,7 @@ struct CatBreed: Identifiable {
         self.isFavorite = isFavorite
     }
     
+    /// Create a 'CatBreed' from a 'CatBreedResponse'.
     init(catBreedEntity: CatBreedEntity) {
         self.id = catBreedEntity.id
         self.name = catBreedEntity.name

@@ -11,9 +11,11 @@ import Combine
 struct MockAPIClient: HTTPClient {
     
     // MARK: - Properties
+    
     private let dataPersistence: DataPersistence
     
     // MARK: - Initialization
+    
     init(persistence: DataPersistence = CatBreedDataPersistence.mock) {
         self.dataPersistence = persistence
     }
@@ -42,7 +44,7 @@ struct MockAPIClient: HTTPClient {
         try? loadMockDataSync(fileName: "catlist", type: [CatBreedResponse].self).first
     }
     
-    // MARK: - Private Helper Methods
+    // MARK: - Private Methods
     
     private func loadMockData<T: Decodable>(fileName: String, type: T.Type) -> AnyPublisher<T, HTTPClientError> {
         guard let url = Bundle.main.url(forResource: fileName, withExtension: "json") else {

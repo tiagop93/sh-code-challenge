@@ -9,12 +9,17 @@ import Foundation
 
 @Observable
 class BaseViewModel {
+    
+    // MARK: - State Enum
+    
     enum State: Equatable {
         case none
         case loading
         case success
         case failed
     }
+    
+    // MARK: - Properties
     
     var state: State = .none
 }

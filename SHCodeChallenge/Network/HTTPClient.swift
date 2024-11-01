@@ -12,7 +12,6 @@ protocol HTTPClient {
     func fetchCatBreeds(page: Int) -> AnyPublisher<DataResponse<[CatBreedResponse]>, HTTPClientError>
     
     func searchCatBreeds(searchTerm: String) -> AnyPublisher<DataResponse<[CatBreedResponse]>, HTTPClientError>
-    
 }
 
 // MARK: - DataSource

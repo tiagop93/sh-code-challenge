@@ -21,7 +21,6 @@
 		27FDB4762CD26FC3002E7720 /* BaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDB4752CD26FC3002E7720 /* BaseViewModel.swift */; };
 		27FDB4782CD28975002E7720 /* CatDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDB4772CD28975002E7720 /* CatDetailsView.swift */; };
 		27FDB47A2CD289C7002E7720 /* MockAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDB4792CD289C7002E7720 /* MockAPIClient.swift */; };
-		27FDB47C2CD28AE2002E7720 /* CatFavoriteStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDB47B2CD28AE2002E7720 /* CatFavoriteStatus.swift */; };
 		27FDB4802CD2A160002E7720 /* JSONDecoder+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDB47F2CD2A160002E7720 /* JSONDecoder+Extensions.swift */; };
 		27FDB4842CD3AF39002E7720 /* FavoriteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDB4832CD3AF39002E7720 /* FavoriteButton.swift */; };
 		27FDB4892CD3B205002E7720 /* CatBreedEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDB4882CD3B205002E7720 /* CatBreedEntity.swift */; };
@@ -49,7 +48,6 @@
 		27FDB4752CD26FC3002E7720 /* BaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewModel.swift; sourceTree = "<group>"; };
 		27FDB4772CD28975002E7720 /* CatDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatDetailsView.swift; sourceTree = "<group>"; };
 		27FDB4792CD289C7002E7720 /* MockAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAPIClient.swift; sourceTree = "<group>"; };
-		27FDB47B2CD28AE2002E7720 /* CatFavoriteStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatFavoriteStatus.swift; sourceTree = "<group>"; };
 		27FDB47F2CD2A160002E7720 /* JSONDecoder+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JSONDecoder+Extensions.swift"; sourceTree = "<group>"; };
 		27FDB4832CD3AF39002E7720 /* FavoriteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteButton.swift; sourceTree = "<group>"; };
 		27FDB4882CD3B205002E7720 /* CatBreedEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatBreedEntity.swift; sourceTree = "<group>"; };
@@ -128,7 +126,6 @@
 			children = (
 				27FDB4752CD26FC3002E7720 /* BaseViewModel.swift */,
 				27FDB4652CD11AA1002E7720 /* CatDashboardViewModel.swift */,
-				27FDB47B2CD28AE2002E7720 /* CatFavoriteStatus.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -287,7 +284,6 @@
 				27FDB46F2CD25A27002E7720 /* HTTPClient.swift in Sources */,
 				27FDB4892CD3B205002E7720 /* CatBreedEntity.swift in Sources */,
 				27FDB4732CD25DBC002E7720 /* APIConstants.swift in Sources */,
-				27FDB47C2CD28AE2002E7720 /* CatFavoriteStatus.swift in Sources */,
 				27FDB48D2CD3C586002E7720 /* DataPersistence.swift in Sources */,
 				27FDB47A2CD289C7002E7720 /* MockAPIClient.swift in Sources */,
 				27FDB4762CD26FC3002E7720 /* BaseViewModel.swift in Sources */,

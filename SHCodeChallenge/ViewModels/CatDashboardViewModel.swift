@@ -10,11 +10,16 @@ import Combine
 
 @Observable
 class CatDashboardViewModel: BaseViewModel {
+    
+    // MARK: - Mode Enum
+    
     enum Mode {
         case live
         case search
         case offline
     }
+    
+    // MARK: - Properties
     
     @ObservationIgnored private let apiClient: HTTPClient
     @ObservationIgnored private let dataStore: CatBreedDataPersistence
@@ -26,6 +31,8 @@ class CatDashboardViewModel: BaseViewModel {
     private var currentPage = APIConstants.initialPage
     private let loadNextPageSubject = PassthroughSubject<Void, Never>()
     private var mode: Mode = .live
+    
+    // MARK: - Initialization
     
     init(apiClient: HTTPClient, dataStore: CatBreedDataPersistence) {
         self.apiClient = apiClient
@@ -90,16 +97,10 @@ class CatDashboardViewModel: BaseViewModel {
         apiClient.fetchCatBreeds(page: currentPage)
             .sink { [weak self] completion in
                 guard let self = self else { return }
-                switch completion {
-                case .finished:
-                    self.state = .success
-                case .failure(let error):
-                    print(error)
-                    self.state = .failed
-                }
+                self.handleRequestCompletion(completion)
             } receiveValue: { [weak self] response in
                 guard let self = self else { return }
-                self.catBreeds.append(contentsOf: mapResponseToCatBreeds(response.data))
+                self.catBreeds.append(contentsOf: convertResponseToBreeds(response.data))
                 self.mode = (response.source == .online) ? .live : .offline
             }.store(in: &cancellables)
     }
@@ -108,18 +109,22 @@ class CatDashboardViewModel: BaseViewModel {
         apiClient.searchCatBreeds(searchTerm: searchString)
             .sink { [weak self] completion in
                 guard let self = self else { return }
-                switch completion {
-                case .finished:
-                    self.state = .success
-                case .failure(let error):
-                    print(error)
-                    self.state = .failed
-                }
+                self.handleRequestCompletion(completion)
             } receiveValue: { [weak self] response in
                 guard let self = self else { return }
-                self.catBreeds.append(contentsOf: mapResponseToCatBreeds(response.data))
+                self.catBreeds.append(contentsOf: convertResponseToBreeds(response.data))
                 self.mode = (response.source == .online) ? .search : .offline
             }.store(in: &cancellables)
+    }
+    
+    private func handleRequestCompletion(_ completion: Subscribers.Completion<HTTPClientError>) {
+        switch completion {
+        case .finished:
+            state = .success
+        case .failure(let error):
+            print(error)
+            state = .failed
+        }
     }
     
     @MainActor
@@ -140,7 +145,7 @@ class CatDashboardViewModel: BaseViewModel {
             .store(in: &cancellables)
     }
     
-    private func mapResponseToCatBreeds(_ catBreedResponse: [CatBreedResponse]) -> [CatBreed] {
+    private func convertResponseToBreeds(_ catBreedResponse: [CatBreedResponse]) -> [CatBreed] {
         let savedCatBreeds = dataStore.fetchCatBreeds(for: catBreedResponse)
         return catBreedResponse.map { catBreedResponse in
             let isFavorite = savedCatBreeds.first { $0.id == catBreedResponse.id }?.isFavorite ?? false
