@@ -43,7 +43,7 @@ struct CatDashboardView: View {
                     }
                 case .failed:
                     ContentUnavailableView {
-                        Text("Error loading cat breeds")
+                        Text("Error fetching cat breeds")
                     } description: {
                         Button("Retry") {
                             viewModel.reloadData()
@@ -67,6 +67,11 @@ struct CatDashboardView: View {
                 text: $viewModel.searchString,
                 placement: .navigationBarDrawer(displayMode: .always)
             )
+            .onChange(of: viewModel.searchString) { _, newValue in
+                if newValue.isEmpty {
+                    viewModel.reloadData()
+                }
+            }
             .onSubmit(of: .search) {
                 viewModel.searchData()
             }

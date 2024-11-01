@@ -20,16 +20,22 @@ struct MockAPIClient: HTTPClient {
     
     // MARK: - Public Methods
     
-    func fetchCatBreeds(page: Int) -> AnyPublisher<[CatBreedResponse], HTTPClientError> {
+    func fetchCatBreeds(page: Int) -> AnyPublisher<DataResponse<[CatBreedResponse]>, HTTPClientError> {
         return loadMockData(fileName: "catlist", type: [CatBreedResponse].self)
             .handleEvents(receiveOutput: { catBreeds in
                 dataPersistence.saveCatBreeds(catBreeds)
             })
+            .map { DataResponse(data: $0, source: .offline)}
             .eraseToAnyPublisher()
     }
     
-    func searchCatBreeds(searchTerm: String) -> AnyPublisher<[CatBreedResponse], HTTPClientError> {
+    func searchCatBreeds(searchTerm: String) -> AnyPublisher<DataResponse<[CatBreedResponse]>, HTTPClientError> {
         loadMockData(fileName: "catlist", type: [CatBreedResponse].self)
+            .handleEvents(receiveOutput: { catBreeds in
+                dataPersistence.saveCatBreeds(catBreeds)
+            })
+            .map { DataResponse(data: $0, source: .offline)}
+            .eraseToAnyPublisher()
     }
     
     func getFirstCatBreed() -> CatBreedResponse? {

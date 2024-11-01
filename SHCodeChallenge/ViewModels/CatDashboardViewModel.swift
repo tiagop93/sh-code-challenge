@@ -11,8 +11,9 @@ import Combine
 @Observable
 class CatDashboardViewModel: BaseViewModel {
     enum Mode {
-        case normal
+        case live
         case search
+        case offline
     }
     
     @ObservationIgnored private let apiClient: HTTPClient
@@ -24,8 +25,7 @@ class CatDashboardViewModel: BaseViewModel {
     
     private var currentPage = APIConstants.initialPage
     private let loadNextPageSubject = PassthroughSubject<Void, Never>()
-    private var mode: Mode = .normal
-    private var favoriteCatBreedIDs: Set<String> = []
+    private var mode: Mode = .live
     
     init(apiClient: HTTPClient, dataStore: CatBreedDataPersistence) {
         self.apiClient = apiClient
@@ -38,7 +38,7 @@ class CatDashboardViewModel: BaseViewModel {
     
     @MainActor
     func loadDataIfNeeded() {
-        guard state == .none, mode == .normal else { return }
+        guard state == .none, mode == .live else { return }
         state = .loading
         self.fetchCatBreeds()
     }
@@ -47,7 +47,6 @@ class CatDashboardViewModel: BaseViewModel {
     func reloadData() {
         catBreeds = []
         currentPage = APIConstants.initialPage
-        mode = .normal
         state = .loading
         self.fetchCatBreeds()
     }
@@ -56,7 +55,6 @@ class CatDashboardViewModel: BaseViewModel {
     func searchData() {
         catBreeds = []
         currentPage = APIConstants.initialPage
-        mode = .search
         state = .loading
         self.searchCatBreeds()
     }
@@ -78,7 +76,7 @@ class CatDashboardViewModel: BaseViewModel {
     }
     
     func triggerLoadNextPage() {
-        guard mode == .normal else { return }
+        guard mode == .live else { return }
         loadNextPageSubject.send(())
     }
     
@@ -101,7 +99,8 @@ class CatDashboardViewModel: BaseViewModel {
                 }
             } receiveValue: { [weak self] response in
                 guard let self = self else { return }
-                self.catBreeds.append(contentsOf: mapResponseToCatBreeds(response))
+                self.catBreeds.append(contentsOf: mapResponseToCatBreeds(response.data))
+                self.mode = (response.source == .online) ? .live : .offline
             }.store(in: &cancellables)
     }
     
@@ -118,13 +117,14 @@ class CatDashboardViewModel: BaseViewModel {
                 }
             } receiveValue: { [weak self] response in
                 guard let self = self else { return }
-                self.catBreeds.append(contentsOf: mapResponseToCatBreeds(response))
+                self.catBreeds.append(contentsOf: mapResponseToCatBreeds(response.data))
+                self.mode = (response.source == .online) ? .search : .offline
             }.store(in: &cancellables)
     }
     
     @MainActor
     private func loadNextPage() {
-        guard state != .loading, mode == .normal else { return }
+        guard state != .loading, mode == .live else { return }
         currentPage += 1
         fetchCatBreeds()
     }
